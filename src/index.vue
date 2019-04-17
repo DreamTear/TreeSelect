@@ -38,9 +38,10 @@
               :key="getValueKey(item)"
               size="small"
               type="info"
+              closable
               disable-transitions
               @close="deleteTag($event, item)">
-              <span class="el-select__tags-text">{{ item[treeOpt.props.label] }}</span>
+              <span class="el-select__tags-text">{{ item.label }}</span>
             </el-tag>
           </transition-group>
         </div>
@@ -350,7 +351,7 @@ export default {
               result.push(node)
             } else {
               result.push({
-                [this.treeOpt.label]: this.showValue[index],
+                label: this.showValue[index] || value,
                 [this.treeOpt.key]: value
               })
               loaded = false
@@ -448,6 +449,10 @@ export default {
         return
       }
       this.setSelected()
+    },
+    deleteTag(event, item) {
+      // debugger
+      this.handleMultipSelect(item.data, item)
     }
   }
 }
