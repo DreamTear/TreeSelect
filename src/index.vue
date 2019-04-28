@@ -9,23 +9,25 @@
       v-model="popoverVisible"
       trigger="manual"
       placement="bottom">
-      <el-tree
-        ref="tree"
-        :data = "treeOpt.data"
-        :load="treeOpt.load"
-        :lazy="treeOpt.lazy"
-        :props="treeOpt.props"
-        :node-key="treeOpt.key"
-        :expand-on-click-node="treeOpt.showCheckbox"
-        :show-checkbox="treeOpt.showCheckbox"
-        :check-strictly="multiple ? treeOpt.checkStrictly : true"
-        class="tree-select-popover"
-        @check="treeCheckhandle"
-        @node-click="handleNodeClick">
-        <span slot-scope="{ node, data }" :class="{selected: node.selected}">
-          {{ node.label }}
-        </span>
-      </el-tree>
+      <el-scrollbar wrap-class="tree-scrollbar-wrapper">
+        <el-tree
+          ref="tree"
+          :data = "treeOpt.data"
+          :load="treeOpt.load"
+          :lazy="treeOpt.lazy"
+          :props="treeOpt.props"
+          :node-key="treeOpt.key"
+          :expand-on-click-node="treeOpt.showCheckbox"
+          :show-checkbox="treeOpt.showCheckbox"
+          :check-strictly="multiple ? treeOpt.checkStrictly : true"
+          class="tree-select-popover"
+          @check="treeCheckhandle"
+          @node-click="handleNodeClick">
+          <span slot-scope="{ node, data }" :class="{selected: node.selected}">
+            {{ node.label }}
+          </span>
+        </el-tree>
+      </el-scrollbar>
       <div slot="reference">
         <div
           v-if="multiple"
@@ -460,6 +462,9 @@ export default {
 <style lang="scss">
   .tree-select {
     width: 100%;
+  }
+  .tree-scrollbar-wrapper {
+    max-height: 50vh;
   }
   .tree-select-popover {
     .el-tree-node {
