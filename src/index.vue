@@ -28,7 +28,7 @@
           </span>
         </el-tree>
       </el-scrollbar>
-      <div slot="reference">
+      <div slot="reference" class="popover-reference">
         <div
           v-if="multiple"
           ref="tags"
@@ -50,6 +50,7 @@
         <el-input
           ref="reference"
           v-model="selectedLabel"
+          :placeholder="currentPlaceholder"
           readonly
           @focus="handleFocus"
         >
@@ -84,6 +85,10 @@ export default {
     value: {
       type: [String, Array],
       required: true
+    },
+    placeholder: {
+      type: String,
+      default: ''
     },
     treeOption: {
       type: Object,
@@ -131,51 +136,9 @@ export default {
       menuVisibleOnFocus: false,
       softFocus: false,
       allSelectedNodesLoaded: false,
+      currentPlaceholder: '',
+      initialInputHeight: 0,
       treeOpt
-      // treeOpt: {
-      //   data: [{
-      //     label: '一级 1',
-      //     children: [{
-      //       label: '二级 1-1',
-      //       children: [{
-      //         label: '三级 1-1-1'
-      //       }]
-      //     }]
-      //   }, {
-      //     label: '一级 2',
-      //     children: [{
-      //       label: '二级 2-1',
-      //       children: [{
-      //         label: '三级 2-1-1'
-      //       }]
-      //     }, {
-      //       label: '二级 2-2',
-      //       children: [{
-      //         label: '三级 2-2-1'
-      //       }]
-      //     }]
-      //   }, {
-      //     label: '一级 3',
-      //     children: [{
-      //       label: '二级 3-1',
-      //       children: [{
-      //         label: '三级 3-1-1'
-      //       }]
-      //     }, {
-      //       label: '二级 3-2',
-      //       children: [{
-      //         label: '三级 3-2-1'
-      //       }]
-      //     }]
-      //   }],
-      //   props: {
-      //     children: 'children',
-      //     label: 'label'
-      //   },
-      //   key: 'label',
-      //   showCheckbox: true,
-      //   checkStrictly: false
-      // }
     }
   },
   computed: {
@@ -193,14 +156,17 @@ export default {
       let deSelect
       if (this.multiple) {
         this.resetInputHeight()
-        deSelect = oldVal.filter(item => {
-          return !val.includes(item)
-        })
+        if (oldVal) {
+          deSelect = oldVal.filter(item => {
+            return !val.includes(item)
+          })
+        }
       } else {
         deSelect = oldVal
       }
       this.setSelected()
       this.setDeSelected(deSelect)
+      this.managePlaceholder()
     }
   },
   created() {
@@ -214,6 +180,8 @@ export default {
   mounted() {
     const reference = this.$refs.reference
 
+    this.managePlaceholder()
+    this.initialInputHeight = reference.$el.getBoundingClientRect().height
     this.$nextTick(() => {
       if (reference && reference.$el) {
         this.inputWidth = reference.$el.getBoundingClientRect().width
@@ -447,6 +415,7 @@ export default {
     },
     nodeLoaded() {
       // debugger
+      // this.handlePopoverHeight()
       if (this.allSelectedNodesLoaded) {
         return
       }
@@ -455,6 +424,10 @@ export default {
     deleteTag(event, item) {
       // debugger
       this.handleMultipSelect(item.data, item)
+    },
+    managePlaceholder() {
+      const val = this.value
+      this.currentPlaceholder = val.length === 0 ? this.placeholder : ''
     }
   }
 }
@@ -473,5 +446,8 @@ export default {
         font-weight: 700;
       }
     }
+  }
+  .popover-reference {
+    line-height: normal;
   }
 </style>
