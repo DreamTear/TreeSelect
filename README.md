@@ -26,6 +26,11 @@
 
 提交的值
 
+## placeholder
+类型： String
+
+没有值是显示的占位内容
+
 ## treeOption
 类型： Object
 
