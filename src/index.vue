@@ -33,14 +33,14 @@
           v-if="multiple"
           ref="tags"
           :style="{ 'max-width': inputWidth - 32 + 'px', width: '100%' }"
-          class="el-select__tags">
+          :class="['el-select__tags', selectDisabled ? 'is-disabled' : '']">
           <transition-group @after-leave="resetInputHeight">
             <el-tag
               v-for="item in selected"
               :key="getValueKey(item)"
+              :closable="!selectDisabled"
               size="small"
               type="info"
-              closable
               disable-transitions
               @close="deleteTag($event, item)">
               <span class="el-select__tags-text">{{ item.label }}</span>
@@ -49,6 +49,7 @@
         </div>
         <el-input
           ref="reference"
+          :disabled="selectDisabled"
           v-model="selectedLabel"
           :placeholder="currentPlaceholder"
           readonly
@@ -68,6 +69,15 @@ import Clickoutside from 'element-ui/lib/utils/clickoutside'
 export default {
   name: 'TreeSelect',
   directives: { Clickoutside },
+  inject: {
+    elForm: {
+      default: ''
+    },
+
+    elFormItem: {
+      default: ''
+    }
+  },
   props: {
     multiple: {
       type: Boolean,
@@ -89,6 +99,10 @@ export default {
     placeholder: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     },
     treeOption: {
       type: Object,
@@ -144,6 +158,10 @@ export default {
   computed: {
     iconClass() {
       return this.popoverVisible ? 'arrow-up is-reverse' : 'arrow-up'
+    },
+
+    selectDisabled() {
+      return this.disabled || (this.elForm || {}).disabled
     }
   },
   watch: {
@@ -220,16 +238,16 @@ export default {
     },
     toggleMenu() {
       // debugger
-      // if (!this.selectDisabled) {
+      if (!this.selectDisabled) {
       //   if (this.menuVisibleOnFocus) {
       //     this.menuVisibleOnFocus = false
       //   } else {
       //   }
-      this.popoverVisible = !this.popoverVisible
-      if (this.popoverVisible) {
-        (this.$refs.input || this.$refs.reference).focus()
+        this.popoverVisible = !this.popoverVisible
+        if (this.popoverVisible) {
+          (this.$refs.input || this.$refs.reference).focus()
+        }
       }
-      // }
     },
     treeCheckhandle(data, state) {
       // debugger

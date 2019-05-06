@@ -31,6 +31,11 @@
 
 没有值是显示的占位内容
 
+## disabled
+类型： Boolean
+
+设置下拉树不可用
+
 ## treeOption
 类型： Object
 
