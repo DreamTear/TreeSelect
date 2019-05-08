@@ -66,6 +66,7 @@
 </template>
 <script>
 import Clickoutside from 'element-ui/lib/utils/clickoutside'
+import { addResizeListener, removeResizeListener } from 'element-ui/lib/utils/resize-event'
 export default {
   name: 'TreeSelect',
   directives: { Clickoutside },
@@ -198,6 +199,7 @@ export default {
   mounted() {
     const reference = this.$refs.reference
 
+    addResizeListener(this.$el, this.handleResize)
     this.managePlaceholder()
     this.initialInputHeight = reference.$el.getBoundingClientRect().height
     this.$nextTick(() => {
@@ -214,6 +216,9 @@ export default {
     })
 
     this.setSelected()
+  },
+  beforeDestroy() {
+    if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize)
   },
   methods: {
     // loadNode(node, resolve) {
@@ -446,6 +451,13 @@ export default {
     managePlaceholder() {
       const val = this.value
       this.currentPlaceholder = val.length === 0 ? this.placeholder : ''
+    },
+    resetInputWidth() {
+      this.inputWidth = this.$refs.reference.$el.getBoundingClientRect().width
+    },
+    handleResize() {
+      this.resetInputWidth()
+      if (this.multiple) this.resetInputHeight()
     }
   }
 }
