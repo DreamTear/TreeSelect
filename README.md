@@ -55,5 +55,6 @@
 	},
 	key: '',// 配置树上使用的key
 	showCheckbox: false,
-	checkStrictly: false
+	checkStrictly: false,
+	defaultExpandedKeys: []
 }

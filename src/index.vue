@@ -20,6 +20,7 @@
           :expand-on-click-node="treeOpt.showCheckbox"
           :show-checkbox="treeOpt.showCheckbox"
           :check-strictly="multiple ? treeOpt.checkStrictly : true"
+          :default-expanded-keys="treeOpt.defaultExpandedKeys"
           class="tree-select-popover"
           @check="treeCheckhandle"
           @node-click="handleNodeClick">
@@ -120,7 +121,8 @@ export default {
           },
           key: '',
           showCheckbox: false,
-          checkStrictly: false
+          checkStrictly: false,
+          defaultExpandedKeys: []
         }
       }
     }
