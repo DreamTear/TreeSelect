@@ -286,7 +286,7 @@ export default {
       // debugger
       // node.selected = true
       // this.selectedLabel = data.label
-      if (this.treeOpt.showCheckbox) {
+      if (this.treeOpt.showCheckbox || node.disabled) {
         return
       }
       if (this.multiple) {
